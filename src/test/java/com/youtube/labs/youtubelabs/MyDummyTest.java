@@ -17,7 +17,7 @@ public class MyDummyTest {
     public void assertThatOnePlusTwoIsThree () {
         int somme = 2 +1;
         assertThat(somme).isNotNull();
-        assertThat(somme).isEqualTo(2);
+        assertThat(somme).isEqualTo(3);
     }
 
 }
