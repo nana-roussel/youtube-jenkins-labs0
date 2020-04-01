@@ -2,6 +2,6 @@ node {
     tool name: 'maven363'
 
     stage('Get maven version') {
-        sh 'mvn version'
+        sh 'mvn --version'
     }       
 }
