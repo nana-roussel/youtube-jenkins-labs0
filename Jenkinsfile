@@ -4,16 +4,18 @@ pipeline {
         maven 'maven363' 
     }
     stages {
-        parallel {
-            stage('Echo') {
-                steps {
-                    echo "Le step de test"
-                    sh 'mvn --version'
+        stage ('Echo et Unit test') {
+            parallel {
+                stage('Echo') {
+                    steps {
+                        echo "Le step de test"
+                        sh 'mvn --version'
+                    }
                 }
-            }
-            stage('Unit test') {
-                steps {
-                    sh 'mvn test'
+                stage('Unit test') {
+                    steps {
+                        sh 'mvn test'
+                    }
                 }
             }
         }
