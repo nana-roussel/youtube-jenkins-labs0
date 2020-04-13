@@ -18,7 +18,13 @@ pipeline {
         stage('Build and Run docker image') {
              steps {
                 sh 'docker build -t freemanpolys/test:v1.0.0 .'
-                sh 'docker rm -f test'
+                script {
+                    try {
+                        sh 'docker rm -f test'
+                    }catch (exc) {
+                        echo 'Erreur de suppression'
+                    }
+                }
                 sh 'docker run --name test -d -p 8088:8088 freemanpolys/test:v1.0.0'
             }
          }         
