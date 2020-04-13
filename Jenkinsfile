@@ -17,7 +17,7 @@ pipeline {
          }  
         stage('Build and Run docker image') {
              steps {
-                sh 'docker build -t freemanpolys/test:v1.0.0 .'
+                sh "docker build -t freemanpolys/test:v1.0.${BUILD_NUMBER} ."
                 script {
                     try {
                         sh 'docker rm -f test'
@@ -25,10 +25,14 @@ pipeline {
                         echo 'Erreur de suppression'
                     }
                 }
-                sh 'docker run --name test -d -p 8088:8088 freemanpolys/test:v1.0.0'
+                sh "docker run --name test -d -p 8088:8088 freemanpolys/test:v1.0.${BUILD_NUMBER}"
             }
          }         
-
+         stage('Push docker image') {
+             steps {
+                sh "docker push freemanpolys/test:v1.0.${BUILD_NUMBER}"
+            }
+         } 
     }
 
     post {
