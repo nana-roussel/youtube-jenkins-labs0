@@ -15,9 +15,18 @@ pipeline {
                 sh 'mvn package -DskipTest'
             }
          }  
+
+         stage('Push docker image') {
+             steps {
+                 script{
+                    def image = docker.build("freemanpolys/test:v1.0.${BUILD_NUMBER}")
+                    image.push()
+                 }
+            }
+         } 
+
         stage('Build and Run docker image') {
              steps {
-                sh "docker build -t freemanpolys/test:v1.0.${BUILD_NUMBER} ."
                 script {
                     try {
                         sh 'docker rm -f test'
@@ -28,11 +37,6 @@ pipeline {
                 sh "docker run --name test -d -p 8088:8088 freemanpolys/test:v1.0.${BUILD_NUMBER}"
             }
          }         
-         stage('Push docker image') {
-             steps {
-                sh "docker push freemanpolys/test:v1.0.${BUILD_NUMBER}"
-            }
-         } 
     }
 
     post {
