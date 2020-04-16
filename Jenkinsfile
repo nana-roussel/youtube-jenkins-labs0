@@ -20,7 +20,7 @@ pipeline {
              steps {
                  script{
                     docker.withRegistry('https://docker.io', 'dockerhub') {
-                        def image = docker.build("freemanpolys/test:v1.0.${BUILD_NUMBER}")
+                        def image = docker.build("freemanpolys/youtube:v1.0.${BUILD_NUMBER}")
                         image.push()
                     }
                  }
