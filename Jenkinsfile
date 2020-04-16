@@ -19,8 +19,10 @@ pipeline {
          stage('Push docker image') {
              steps {
                  script{
-                    def image = docker.build("freemanpolys/test:v1.0.${BUILD_NUMBER}")
-                    image.push()
+                    docker.withRegistry('https://docker.io', 'dockerhub') {
+                        def image = docker.build("freemanpolys/test:v1.0.${BUILD_NUMBER}")
+                        image.push()
+                    }
                  }
             }
          } 
