@@ -31,7 +31,7 @@ pipeline {
          stage('Push docker image') {
              steps {
                       withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "dockerhub" ,)]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login docker.io -u "$DOCKER_USERNAME" --password-stdin'
+                        sh 'docker login docker.io -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD'
                         sh 'docker push  freemanpolys/test:v1.0.${BUILD_NUMBER}'
                     }
             }
