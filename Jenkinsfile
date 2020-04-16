@@ -29,11 +29,11 @@ pipeline {
             }
          }         
          stage('Push docker image') {
-             steps {
-                      withCredentials([usernamePassword(credentialsId : "dockerhub",passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME')]) {
-                        sh 'docker login docker.io -u "$DOCKER_USERNAME" -p $DOCKER_PASSWORD'
-                        sh 'docker push  freemanpolys/test:v1.0.${BUILD_NUMBER}'
-                    }
+            steps {
+                withCredentials([usernamePassword(credentialsId : "dockerhub",passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME')]) {
+                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                    sh 'docker push  freemanpolys/test:v1.0.${BUILD_NUMBER}'
+                }
             }
          }
     }
