@@ -28,12 +28,12 @@ pipeline {
                         def image = docker.build("freemanpolys/youtube:v1.0.${BUILD_NUMBER}")
                         image.push()
                     }
-                    */
-                    withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+                 }
+                 */
+                      withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
                         sh 'docker push  freemanpolys/test:v1.0.${BUILD_NUMBER}'
                     }
-                 }
             }
          } 
 
