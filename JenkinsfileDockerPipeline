@@ -10,17 +10,7 @@ pipeline {
             steps {
                 sh 'mvn --version'
             }
-        }        
-
-        stage('Agent local node') {
-            options { skipDefaultCheckout() }
-            agent {
-                docker { image 'node:7-alpine' }
-            }
-            steps {
-                sh 'node --version'
-            }
-        }        
+        }               
         stage ('Unit test') {
             steps {
                 sh 'mvn test'
