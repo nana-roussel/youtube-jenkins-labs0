@@ -13,6 +13,7 @@ pipeline {
         }        
 
         stage('Agent local node') {
+            options { skipDefaultCheckout() }
             agent {
                 docker { image 'node:7-alpine' }
             }
