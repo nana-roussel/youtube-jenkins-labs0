@@ -1,16 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v $HOME/.m2:/root/.m2'
-        }
-    }
-    stages {
-        stage('Agent global maven') {
-            steps {
-                sh 'mvn --version'
-            }
-        }               
+    agent { any }
+    stages {               
         stage ('Unit test') {
             steps {
                 sh 'mvn test'
@@ -18,25 +8,25 @@ pipeline {
         }   
         
          stage('Package') {
-             steps {
+            agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v $HOME/.m2:/root/.m2'
+                }
+            }             
+            steps {
+                sh 'mvn test'
                 sh 'mvn package -DskipTest'
+                stash includes: 'target', name: 'target'
             }
          }  
-        stage('Build and push image') {
+
+        stage('Build image') {
              steps {
-                script {
-                    def image = docker.build("freemanpolys/test:v1.0.${BUILD_NUMBER}")
-                    withCredentials([usernamePassword(credentialsId : "dockerhub",passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-                        image.push()
-                    }
-                }
+                unstash :	'target'
+                sh 'ls target'
             }
-         }         
-         stage('Run container') {
-            steps {
-                sh "docker run --name test -d -p 8088:8088 freemanpolys/test:v1.0.${BUILD_NUMBER}"
-            }
-         }
+         }        
+        
     }
 }
